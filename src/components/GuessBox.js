@@ -37,6 +37,7 @@ function GuessBox({player, sendGuess}) {
     <input
       className="input"
       type="text"
+      inputMode="numeric"
       value={guessNumber}
       maxLength={4}
       onChange={(e) => onGuessNumberChange(e.target.value)}

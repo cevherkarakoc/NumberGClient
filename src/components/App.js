@@ -53,7 +53,7 @@ export function App() {
   }
 
   function joinGame(name) {
-    send(ws, id, "join-game", { name });
+    send(ws, id, "join-game", { name : name.toLowerCase() });
 
     setPlayerTag("delta");
     setScreen("game");
