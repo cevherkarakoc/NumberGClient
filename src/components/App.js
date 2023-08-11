@@ -12,7 +12,7 @@ export function App() {
   const [game, setGame] = useState({});
 
   useEffect(() => {
-    const _ws = new WebSocket("ws://app.ceveka.com:9009");
+    const _ws = new WebSocket("wss://app.ceveka.com/numgerg");
     _ws.addEventListener("message", (event) => {
       const { type, payload } = JSON.parse(event.data);
 
