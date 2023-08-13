@@ -5,7 +5,7 @@ import GuessBox from "./GuessBox";
 import NumberChoose from "./NumberChoose";
 import Wait from "./Wait";
 
-function Game({ game, playerTag, sendNumber, sendGuess, newGame }) {
+function Game({ game, playerTag, sendNumber, sendGuess, newGame, endGame }) {
   const opponentTag = playerTag === "alpha" ? "delta" : "alpha";
 
   const { phase, name } = game;
@@ -31,7 +31,7 @@ function Game({ game, playerTag, sendNumber, sendGuess, newGame }) {
         style={{ position: "sticky", top: 0 }}
       >
         {game.phase === "end" ? (
-          <EndGame game={game} playerTag={playerTag} newGame={newGame} />
+          <EndGame game={game} playerTag={playerTag} newGame={newGame} endGame={endGame} />
         ) : (
           <GuessBox player={player} sendGuess={sendGuess} />
         )}

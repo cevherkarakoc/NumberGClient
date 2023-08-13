@@ -12,7 +12,15 @@ export function App() {
   const [game, setGame] = useState({});
 
   useEffect(() => {
+    const _id = localStorage.getItem('numberg.id');
     const _ws = new WebSocket("wss://app.ceveka.com/numberg/");
+
+    _ws.addEventListener('open', () => {
+      if(_id) {
+        send(_ws, _id, 'get-user')
+      }
+    })
+
     _ws.addEventListener("message", (event) => {
       const { type, payload } = JSON.parse(event.data);
 
@@ -23,6 +31,21 @@ export function App() {
           setId(payload.id);
 
           break;
+        case "user":
+            setId(payload.id);
+            setPlayerTag(payload.playerTag);
+
+            localStorage.setItem('numberg.id', payload.id);
+
+
+            if(payload.gameName) {
+              setScreen("game");
+            } else {
+              setScreen("lobby");
+            }
+
+  
+            break;
         case "game":
           setGame(payload);
 
@@ -41,6 +64,7 @@ export function App() {
 
   function sendUsername(name) {
     send(ws, id, "set-user-name", { name });
+    localStorage.setItem('numberg.id', id);
 
     setScreen("lobby");
   }
@@ -73,6 +97,12 @@ export function App() {
     send(ws, id, "new-game", { gameName: game.name });
   }
 
+  function endGame() {
+    send(ws, id, "end-game", { gameName: game.name });
+
+    setScreen("lobby");
+  }
+
   
 
   return (
@@ -84,7 +114,7 @@ export function App() {
         <Lobby createGame={createGame} joinGame={joinGame} />
       )}
       {screen === "game" && (
-        <Game game={game} playerTag={playerTag} sendNumber={sendNumber} sendGuess={sendGuess} newGame={newGame}/>
+        <Game game={game} playerTag={playerTag} sendNumber={sendNumber} sendGuess={sendGuess} newGame={newGame} endGame={endGame}/>
       )}
     </div>
   );
